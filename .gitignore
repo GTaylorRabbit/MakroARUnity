@@ -4,6 +4,10 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+Anchor Prototype/Assets/Poly*
+Anchor Prototype/Assets/PolyToolkit*
+Anchor Prototype/Assets/PlayServicesResolver*
+Anchor Prototype/Assets/GoogleARCore*
 
 # Visual Studio cache directory
 .vs/
@@ -23,6 +27,7 @@ ExportedObj/
 *.svd
 *.pdb
 *.opendb
+*.mp4
 
 # Unity3D generated meta files
 *.pidb.meta
