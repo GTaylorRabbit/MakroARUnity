@@ -9,9 +9,9 @@ public class AugmentedImageVisualizer : MonoBehaviour
     [SerializeField] private VideoClip[] _videoClips;
     public AugmentedImage Image;
     private VideoPlayer _videoPlayer;
-    public GameObject cube;
     public GameObject shoppingCart;
     public GameObject videoPlane;
+    public GameObject productDetails;
 
     void Start()
     {
@@ -31,7 +31,7 @@ public class AugmentedImageVisualizer : MonoBehaviour
         {            
             videoPlane.SetActive(false);
             shoppingCart.SetActive(false);
-            cube.SetActive(false);
+            productDetails.SetActive(false);
             return;
         }
 
@@ -53,44 +53,34 @@ public class AugmentedImageVisualizer : MonoBehaviour
                 //Scale the video to mach the Image Size
                 ScaleVideo();
 
+                imageCenter.z += 0.02f;
                 //Update the video to mach the image position
                 videoPlane.transform.localPosition = imageCenter;
                 
                 videoPlane.SetActive(true);   
             }
             if(Image.Name.ToString().Contains("Prod_")){
-                PositionCube(imageCenter);
-                PositionCart(imageCenter);
-                
-                shoppingCart.SetActive(true);
-                cube.SetActive(true);
+                PositionProduct(imageCenter);                
+                shoppingCart.transform.Rotate(0, Time.deltaTime * 50, 0);
+
+                productDetails.SetActive(true);
             }
         }
     }   
 
-    private void PositionCube(Vector3 imageCenter){
-        imageCenter.z -= 0.1f;
-        imageCenter.x -= 0.1f;
-        cube.transform.localPosition = imageCenter;
-    }
-
-    private void PositionCart(Vector3 imageCenter){
-        imageCenter.z -= 0.1f;
-        imageCenter.x += 0.1f;
-        shoppingCart.transform.localPosition = imageCenter;
-        
-        shoppingCart.transform.Rotate(0, Time.deltaTime * 50, 0);
+    private void PositionProduct(Vector3 imageCenter){
+        productDetails.transform.localPosition = imageCenter;
     }
 
     private void ScaleVideo() { 
         var f = Image.ExtentX / Image.ExtentZ; 
         if (Image.ExtentX > Image.ExtentZ) 
         { 
-            videoPlane.transform.localScale = new Vector3(f * Image.ExtentZ / 10,1, Image.ExtentZ /10);             
+            videoPlane.transform.localScale = new Vector3(f * Image.ExtentZ , Image.ExtentZ, 1 );             
         } 
         else
         { 
-            videoPlane.transform.localScale = new Vector3(Image.ExtentX / 10, 1,f * Image.ExtentX /10);
+            videoPlane.transform.localScale = new Vector3(Image.ExtentX, f * Image.ExtentX, 1);
         } 
     }
 }

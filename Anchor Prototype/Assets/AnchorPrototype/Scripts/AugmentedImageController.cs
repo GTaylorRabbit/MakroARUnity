@@ -58,6 +58,10 @@ public class AugmentedImageController : MonoBehaviour
         _visualizers.Add(image.DatabaseIndex, visualizer);
 
         
+            //ARCore will keep understanding the world and update the anchors accordingly hence we need to attach our portal to the anchor
+            visualizer.transform.parent = anchor.transform;
+
+        
 
             /*//Create a new Anchor
             Anchor anchor = hit.Trackable.CreateAnchor(hit.Pose);
