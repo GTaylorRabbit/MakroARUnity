@@ -3,20 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using GoogleARCore;
+using TMPro;
 
 public class AugmentedImageVisualizer : MonoBehaviour
 {
     [SerializeField] private VideoClip[] _videoClips;
     public AugmentedImage Image;
     private VideoPlayer _videoPlayer;
-    public GameObject shoppingCart;
     public GameObject videoPlane;
     public GameObject productDetails;
+    public TextMeshPro productTitle;
+    public TextMeshPro productPrice;
+    public CartController cartController;
+    [SerializeField] private GameObject[] stars;
 
     void Start()
     {
         _videoPlayer = videoPlane.GetComponent<VideoPlayer>();
         _videoPlayer.loopPointReached += OnStop;
+
+        if(Image != null && Image.Name.ToString().Contains("Prod_")){
+            ProductDetail.SetDetailValues(Image.Name.ToString());            
+            productTitle.text = ProductDetail.name;
+            productPrice.text = ProductDetail.price;
+            cartController.SetCartItem(Image.Name.ToString());
+        }
     }
 
     private void OnStop(VideoPlayer source)
@@ -30,8 +41,8 @@ public class AugmentedImageVisualizer : MonoBehaviour
         if(Image == null || Image.TrackingState != TrackingState.Tracking)
         {            
             videoPlane.SetActive(false);
-            shoppingCart.SetActive(false);
             productDetails.SetActive(false);
+
             return;
         }
 
@@ -60,8 +71,13 @@ public class AugmentedImageVisualizer : MonoBehaviour
                 videoPlane.SetActive(true);   
             }
             if(Image.Name.ToString().Contains("Prod_")){
-                PositionProduct(imageCenter);                
-                shoppingCart.transform.Rotate(0, Time.deltaTime * 50, 0);
+                //PositionProduct(imageCenter);
+
+                //Rotate the Stars
+                foreach(var star in stars)
+                {
+                    star.transform.Rotate(0, 0, Time.deltaTime * 50);
+                }    
 
                 productDetails.SetActive(true);
             }
