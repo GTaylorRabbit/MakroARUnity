@@ -1,25 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ItemController : MonoBehaviour
-{
-   public GameObject itemPrefab;
+{    
+    public TextMeshProUGUI productName;
+    public TextMeshProUGUI prodPrice;
+    public TextMeshProUGUI quantityAmount;
+    private string itemName = "";
 
-    public void updateItemList(){        
-        Instantiate(itemPrefab, gameObject.transform);
+    public void SetItemDetails(string prodName){  
+        itemName = prodName;
+        ProductDetail.SetDetailValues(prodName);    
+        productName.text = ProductDetail.name.ToString();
+        prodPrice.text = ProductDetail.price.ToString();
+        quantityAmount.text = CartState.cartItems[prodName].ToString();
     }
 
-    //Invoked when a button is pressed.
-    private void SetParent()
-    {
-        //Makes the GameObject "newParent" the parent of the GameObject "player".
-        itemPrefab.transform.parent = gameObject.transform;
-    }
-
-    private void DetachFromParent()
-    {
-        // Detaches the transform from its parent.
-        transform.parent = null;
+    
+    void Update(){  
+        quantityAmount.text = CartState.cartItems[itemName].ToString();
     }
 }

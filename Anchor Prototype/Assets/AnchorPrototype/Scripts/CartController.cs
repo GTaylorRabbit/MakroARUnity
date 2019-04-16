@@ -12,7 +12,12 @@ public class CartController : MonoBehaviour
     void Update()
     {
         gameObject.transform.Rotate(0, Time.deltaTime * 50, 0);
-        cartCount.text = CartState.cartItems.Count.ToString();
+        if (CartState.cartItems.ContainsKey(cartProductName)){
+            cartCount.text = CartState.cartItems[cartProductName].ToString();
+        }else
+        {
+            cartCount.text = "0";
+        }
     }
 
     public void SetCartItem(string productName){

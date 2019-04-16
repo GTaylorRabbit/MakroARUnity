@@ -4,10 +4,7 @@ using UnityEngine;
 
 public static class CartState
 {
-    public static List<string> cartItems = new List<string>();
+    public static Dictionary<string, int> cartItems = new Dictionary<string, int>();
 
-    public static void AddItemToCart(string prodName){
-        cartItems.Add(prodName);
-    }
 }
 

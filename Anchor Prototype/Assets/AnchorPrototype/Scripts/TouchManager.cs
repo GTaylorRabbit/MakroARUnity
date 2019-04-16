@@ -6,7 +6,8 @@ public class TouchManager : MonoBehaviour
 {
     public GameObject starExplosion;
     private ParticleSystem particleSystem;
-    public ItemController itemController;
+    public GameObject itemPrefab;
+    public GameObject itemContainer;
 
     void Start(){
         particleSystem = starExplosion.GetComponent<ParticleSystem>();
@@ -44,11 +45,20 @@ public class TouchManager : MonoBehaviour
 
     private void CartTouched(RaycastHit hit){        
         CartController cartController = hit.transform.gameObject.GetComponent<CartController>();
-        CartState.AddItemToCart(cartController.GetCartItem());
-        itemController.updateItemList();
+        AddItemToCart(cartController.GetCartItem());
         
         starExplosion.transform.position = hit.transform.gameObject.transform.position;                    
         particleSystem.Stop();
         particleSystem.Play();
+    }
+    
+    private void AddItemToCart(string prodName){
+        if (CartState.cartItems.ContainsKey(prodName)){
+            CartState.cartItems[prodName]++;
+        }else
+        {
+            CartState.cartItems.Add(prodName, 1);
+            Instantiate(itemPrefab, itemContainer.transform).GetComponent<ItemController>().SetItemDetails(prodName);
+        }
     }
 }

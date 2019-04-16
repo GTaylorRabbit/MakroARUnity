@@ -7,7 +7,8 @@ public class CartUIController : MonoBehaviour
 {
     private RectTransform rectTransform;
     public  RectTransform productListRectTransform;
-    public ScrollRect scrollRect;     
+    public ScrollRect scrollRect;
+    private Vector3 uiPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -20,14 +21,19 @@ public class CartUIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float height = rectTransform.sizeDelta.y;
-        float listHeight = productListRectTransform.sizeDelta.y;
+        LimitScrolling();
+    }
 
-        if(gameObject.transform.localPosition.y > (-Screen.height + (CartState.cartItems.Count * 200f) + 250f)){
+    private void LimitScrolling(){
+        float scrollUpLimit = -Screen.height + (CartState.cartItems.Count * 200f) + 300f;
+        
+        uiPosition = gameObject.transform.localPosition;
+
+        if(gameObject.transform.localPosition.y > scrollUpLimit){
             scrollRect.inertia = false;
-            Vector3 position = gameObject.transform.localPosition;
-            position.y = -Screen.height + (CartState.cartItems.Count * 200f) + 250f;
-            gameObject.transform.localPosition  = position;
+            
+            uiPosition.y = scrollUpLimit;
+            gameObject.transform.localPosition  = uiPosition;
         }       
         else if(gameObject.transform.localPosition.y < (-Screen.height + 200f)){
             scrollRect.inertia = false;
@@ -39,12 +45,11 @@ public class CartUIController : MonoBehaviour
     }
 
     private void DefaultPosition(){
-         Vector3 position = gameObject.transform.localPosition;
-         position.y = -Screen.height + 100f;
-         gameObject.transform.localPosition  = position;
+         uiPosition.y = -Screen.height + 100f;
+         gameObject.transform.localPosition  = uiPosition;
     }
 
-    public void showCart() {
+    public void ShowCart() {
          if(gameObject.activeSelf) {
              gameObject.SetActive(false);
          }
