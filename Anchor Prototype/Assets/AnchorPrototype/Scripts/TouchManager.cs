@@ -6,6 +6,7 @@ public class TouchManager : MonoBehaviour
 {
     public GameObject starExplosion;
     private ParticleSystem particleSystem;
+    public ItemController itemController;
 
     void Start(){
         particleSystem = starExplosion.GetComponent<ParticleSystem>();
@@ -13,8 +14,7 @@ public class TouchManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {        
         //Check if the user touches the screen
         Touch touch;
         if(Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
@@ -22,6 +22,10 @@ public class TouchManager : MonoBehaviour
             return;
         }
 
+        TouchedSceneObject();
+    }
+
+    private void TouchedSceneObject(){
         if(Input.GetMouseButton(0))
         {
             Vector3 mousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane);
@@ -33,13 +37,18 @@ public class TouchManager : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(mousePosN, mousePosF-mousePosN, out hit))
             {
-                CartController cartController = hit.transform.gameObject.GetComponent<CartController>();
-                CartState.AddItemToCart(cartController.GetCartItem());
-                
-                starExplosion.transform.position = hit.transform.gameObject.transform.position;                    
-                particleSystem.Stop();
-                particleSystem.Play();
+                CartTouched(hit);
             }
         }
+    }
+
+    private void CartTouched(RaycastHit hit){        
+        CartController cartController = hit.transform.gameObject.GetComponent<CartController>();
+        CartState.AddItemToCart(cartController.GetCartItem());
+        itemController.updateItemList();
+        
+        starExplosion.transform.position = hit.transform.gameObject.transform.position;                    
+        particleSystem.Stop();
+        particleSystem.Play();
     }
 }
