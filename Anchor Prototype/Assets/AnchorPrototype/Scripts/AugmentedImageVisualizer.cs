@@ -14,8 +14,11 @@ public class AugmentedImageVisualizer : MonoBehaviour
     public GameObject productDetails;
     public TextMeshPro productTitle;
     public TextMeshPro productPrice;
-    public CartController cartController;
+    public CartController ProductSceneCart;
     [SerializeField] private GameObject[] stars;
+    private Vector3 imageCenter;
+    public GameObject catalogScene;
+    public CartController CatalogSceneCart;
 
     void Start()
     {
@@ -26,7 +29,12 @@ public class AugmentedImageVisualizer : MonoBehaviour
             ProductDetail.SetDetailValues(Image.Name.ToString());            
             productTitle.text = ProductDetail.name;
             productPrice.text = ProductDetail.price;
-            cartController.SetCartItem(Image.Name.ToString());
+            ProductSceneCart.SetCartItem(Image.Name.ToString());
+        }
+        
+        if(Image != null && Image.Name.ToString().Contains("Cat_")){
+            ProductDetail.SetDetailValues(Image.Name.ToString());
+            CatalogSceneCart.SetCartItem(Image.Name.ToString());
         }
     }
 
@@ -42,50 +50,61 @@ public class AugmentedImageVisualizer : MonoBehaviour
         {            
             videoPlane.SetActive(false);
             productDetails.SetActive(false);
+            catalogScene.SetActive(false);
 
             return;
-        }
-
-        if(Image.Name.ToString().Contains("Vid_")){
-            if(!_videoPlayer.isPlaying)
-            {
-                _videoPlayer.clip = _videoClips[Image.DatabaseIndex];
-                _videoPlayer.Play();
-            }
-        }            
+        }  
         
         if(Image.TrackingState == TrackingState.Tracking){
             
             float halfWidth = Image.ExtentX / 200;
             float halfHeight = Image.ExtentZ / 200;
-            Vector3 imageCenter = (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
+            imageCenter = (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
 
-            if(Image.Name.ToString().Contains("Vid_")){
-                //Scale the video to mach the Image Size
-                ScaleVideo();
-
-                imageCenter.z += 0.02f;
-                //Update the video to mach the image position
-                videoPlane.transform.localPosition = imageCenter;
-                
-                videoPlane.SetActive(true);   
+            if(Image.Name.ToString().Contains("Vid_")){    
+                VideoScene();  
             }
             if(Image.Name.ToString().Contains("Prod_")){
-                //PositionProduct(imageCenter);
-
-                //Rotate the Stars
-                foreach(var star in stars)
-                {
-                    star.transform.Rotate(0, 0, Time.deltaTime * 50);
-                }    
-
-                productDetails.SetActive(true);
+                ProductScene();
+            }
+            if(Image.Name.ToString().Contains("Cat_")){
+                CatalogScene();
             }
         }
     }   
 
-    private void PositionProduct(Vector3 imageCenter){
-        productDetails.transform.localPosition = imageCenter;
+    private void VideoScene(){           
+        if(!_videoPlayer.isPlaying)
+        {
+            _videoPlayer.clip = _videoClips[Image.DatabaseIndex];
+            _videoPlayer.Play();
+        }
+
+        //Scale the video to mach the Image Size
+        ScaleVideo();
+
+        imageCenter.z += 0.02f;
+        //Update the video to mach the image position
+        videoPlane.transform.localPosition = imageCenter;
+        
+        videoPlane.SetActive(true);  
+    }
+
+    private void ProductScene(){
+        //PositionProduct(imageCenter);
+        //productDetails.transform.localPosition = imageCenter;
+
+        //Rotate the Stars
+        foreach(var star in stars)
+        {
+            star.transform.Rotate(0, 0, Time.deltaTime * 50);
+        }    
+
+        productDetails.SetActive(true);
+    }
+
+    private void CatalogScene(){
+        catalogScene.SetActive(true);
     }
 
     private void ScaleVideo() { 

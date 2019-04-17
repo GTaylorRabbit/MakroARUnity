@@ -56,30 +56,9 @@ public class AugmentedImageController : MonoBehaviour
         visualizer = (AugmentedImageVisualizer)Instantiate(augmentedImageVisualizerPrefab, anchor.transform);
         visualizer.Image = image;
         _visualizers.Add(image.DatabaseIndex, visualizer);
-
-        
-            //ARCore will keep understanding the world and update the anchors accordingly hence we need to attach our portal to the anchor
-            visualizer.transform.parent = anchor.transform;
-
-        
-
-            /*//Create a new Anchor
-            Anchor anchor = hit.Trackable.CreateAnchor(hit.Pose);
-
-            //Set the position of the portal to be the same as the hit position
-            portal.transform.position = hit.Pose.position;
-            portal.transform.rotation = hit.Pose.rotation;
-
-            
-            Vector3 cameraPosition = arCamera.transform.position;
-            //portal should only rotate around the Y axis
-            cameraPosition.y = hit.Pose.position.y;
-
-            //Rotate the portal to face the camera
-            portal.transform.LookAt(cameraPosition, portal.transform.up);
-
-            //ARCore will keep understanding the world and update the anchors accordingly hence we need to attach our portal to the anchor
-            portal.transform.parent = anchor.transform;*/
+    
+        //ARCore will keep understanding the world and update the anchors accordingly hence we need to attach our portal to the anchor
+        visualizer.transform.parent = anchor.transform;
     }
 
     private void RemoveVisualizer(AugmentedImage image, AugmentedImageVisualizer visualizer){
