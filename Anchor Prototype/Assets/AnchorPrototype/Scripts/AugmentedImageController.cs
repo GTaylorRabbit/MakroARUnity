@@ -41,8 +41,9 @@ public class AugmentedImageController : MonoBehaviour
             _visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
             if(image.TrackingState == TrackingState.Tracking && visualizer == null)
             {               
+                Anchor anchor = image.CreateAnchor(image.CenterPose);
                 // Create an anchor to ensure that ARCore keeps tracking this augmented image.
-                AddVisualizer(image, visualizer);
+                visualizer = AddVisualizer(image, visualizer);
             }
             else if(image.TrackingState == TrackingState.Stopped && visualizer != null)
             {
@@ -51,7 +52,7 @@ public class AugmentedImageController : MonoBehaviour
         }
     }
 
-    private void AddVisualizer(AugmentedImage image, AugmentedImageVisualizer visualizer){
+    private AugmentedImageVisualizer AddVisualizer(AugmentedImage image, AugmentedImageVisualizer visualizer){
         Anchor anchor = image.CreateAnchor(image.CenterPose);
         visualizer = (AugmentedImageVisualizer)Instantiate(augmentedImageVisualizerPrefab, anchor.transform);
         visualizer.Image = image;
@@ -59,6 +60,7 @@ public class AugmentedImageController : MonoBehaviour
     
         //ARCore will keep understanding the world and update the anchors accordingly hence we need to attach our portal to the anchor
         visualizer.transform.parent = anchor.transform;
+        return visualizer;
     }
 
     private void RemoveVisualizer(AugmentedImage image, AugmentedImageVisualizer visualizer){

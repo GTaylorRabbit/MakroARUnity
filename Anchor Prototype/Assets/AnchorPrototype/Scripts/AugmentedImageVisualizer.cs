@@ -12,21 +12,24 @@ public class AugmentedImageVisualizer : MonoBehaviour
     private VideoPlayer _videoPlayer;
     public GameObject videoPlane;
     public GameObject productDetails;
-    public TextMeshPro productTitle;
-    public TextMeshPro productPrice;
+    public TextMeshPro productTitle, productPrice;
+    public TextMeshPro catalogTitle, catalogPrice;
     public CartController ProductSceneCart;
     [SerializeField] private GameObject[] stars;
     private Vector3 imageCenter;
     public GameObject catalogScene;
     public CartController CatalogSceneCart;
+    public GameObject indexScene;
 
     void Start()
     {
-        _videoPlayer = videoPlane.GetComponent<VideoPlayer>();
-        _videoPlayer.loopPointReached += OnStop;
+        if(Image != null && Image.Name.ToString().Contains("1Vid_")){
+            _videoPlayer = videoPlane.GetComponent<VideoPlayer>();
+            _videoPlayer.loopPointReached += OnStop;
+        }
 
         if(Image != null && Image.Name.ToString().Contains("Prod_")){
-            ProductDetail.SetDetailValues(Image.Name.ToString());            
+            ProductDetail.SetDetailValues(Image.Name.ToString());
             productTitle.text = ProductDetail.name;
             productPrice.text = ProductDetail.price;
             ProductSceneCart.SetCartItem(Image.Name.ToString());
@@ -34,6 +37,8 @@ public class AugmentedImageVisualizer : MonoBehaviour
         
         if(Image != null && Image.Name.ToString().Contains("Cat_")){
             ProductDetail.SetDetailValues(Image.Name.ToString());
+            catalogTitle.text = ProductDetail.name;
+            catalogPrice.text = ProductDetail.price;
             CatalogSceneCart.SetCartItem(Image.Name.ToString());
         }
     }
@@ -51,6 +56,7 @@ public class AugmentedImageVisualizer : MonoBehaviour
             videoPlane.SetActive(false);
             productDetails.SetActive(false);
             catalogScene.SetActive(false);
+            indexScene.SetActive(false);
 
             return;
         }  
@@ -61,7 +67,7 @@ public class AugmentedImageVisualizer : MonoBehaviour
             float halfHeight = Image.ExtentZ / 200;
             imageCenter = (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
 
-            if(Image.Name.ToString().Contains("Vid_")){    
+            if(Image.Name.ToString().Contains("1Vid_")){    
                 VideoScene();  
             }
             if(Image.Name.ToString().Contains("Prod_")){
@@ -69,6 +75,9 @@ public class AugmentedImageVisualizer : MonoBehaviour
             }
             if(Image.Name.ToString().Contains("Cat_")){
                 CatalogScene();
+            }
+            if(Image.Name.ToString().Contains("Index_")){
+                IndexScene();
             }
         }
     }   
@@ -105,6 +114,10 @@ public class AugmentedImageVisualizer : MonoBehaviour
 
     private void CatalogScene(){
         catalogScene.SetActive(true);
+    }
+
+    private void IndexScene(){
+        indexScene.SetActive(true);
     }
 
     private void ScaleVideo() { 

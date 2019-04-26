@@ -25,7 +25,7 @@ public class CartUIController : MonoBehaviour
     }
 
     private void LimitScrolling(){
-        float scrollUpLimit = -Screen.height + (CartState.cartItems.Count * 200f) + 300f;
+        float scrollUpLimit = (CartState.cartItems.Count * 200f) + 50f;
         
         uiPosition = gameObject.transform.localPosition;
 
@@ -35,7 +35,7 @@ public class CartUIController : MonoBehaviour
             uiPosition.y = scrollUpLimit;
             gameObject.transform.localPosition  = uiPosition;
         }       
-        else if(gameObject.transform.localPosition.y < (-Screen.height + 200f)){
+        else if(gameObject.transform.localPosition.y < (-150f)){
             scrollRect.inertia = false;
             DefaultPosition();
         }
@@ -45,7 +45,7 @@ public class CartUIController : MonoBehaviour
     }
 
     private void DefaultPosition(){
-         uiPosition.y = -Screen.height + 100f;
+         uiPosition.y = -130f;
          gameObject.transform.localPosition  = uiPosition;
     }
 
