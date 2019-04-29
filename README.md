@@ -5,6 +5,7 @@ This project was made in **Unity 2018.3.12f1**
 Clone this Repo to your prefered path.
 
 You will need to download and import some **packages** that this project uses:
+----------------------------
 
 ## ARCore
 ###### You will need to import the **Unity** ARCore package:
@@ -51,3 +52,9 @@ Once Downloaded
    - Open the **Asset Store** tab.
    - Search for **Starter Particle Pack**.
    - Download and Import the Asset.
+   
+-----------------------------------------------------------------------------
+
+**Notes:**
+1. Make sure that the **ARCoreDevice** GameObject has the **ARCoreSessionConfig** assigned it's session config.
+2. Make sure that the **ARCoreSessionConfig** in the Config folder has a Augmented Image Database.
